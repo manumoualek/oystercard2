@@ -48,8 +48,8 @@ describe Oystercard do
     end
     
 
-    it "it returns a station name" do
-      expect(@subject.station).not_to eql nil
+    it "it returns a station name, not nill" do
+      expect(@subject.station).to_not eql nil
     end  
 
     # station_dbl = double("station", :name => "Oxford Road")
