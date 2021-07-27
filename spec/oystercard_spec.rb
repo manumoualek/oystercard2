@@ -54,17 +54,37 @@ describe Oystercard do
   end
 
   describe "#touch_out" do 
-    it 'states whether the user has "touched out" or not.' do 
-      subject = Oystercard.new(:station => "Test Station")
-      subject.touch_out
-      expect(subject.in_journey?).to eql false
+
+    before(:each) do
+      @subject = Oystercard.new(:station => "Test Station", :balance => 10)
+      @subject.touch_out("Test Exit Station")
     end
 
-    it "returns the station at touch-out" do
-      subject = Oystercard.new(:station => "Test")
-      subject.touch_out
-      expect(subject.station).to eql nil
+    it 'states whether the user has "touched out" or not.' do 
+      expect(@subject.in_journey?).to eql false
     end
+
+    it "returns the station at touch-out" do 
+      expect(@subject.station).to eql nil
+    end
+
+    it "returns the correct entry and exit stations" do
+      # subject = Oystercard.new(:station => "Test Station")
+      # subject.touch_out("Test Exit Station")
+      expect([@subject.journeys[0][:entry_station],@subject.journeys[0][:exit_station]]).to eql ["Test Station", "Test Exit Station"]  
+    end  
+
+    it "adds all journeys the array" do
+      # subject.top_up(10)
+      # subject = Oystercard.new
+      # subject.touch_out("Test Exit Station")
+      # @subject.top_up(5)
+      @subject.touch_in("New Entry Station")
+      @subject.touch_out("New Exit Station")
+      expect(@subject.journeys.length).to eql 2
+    end  
+
+
   end 
 
 
@@ -78,7 +98,11 @@ describe Oystercard do
 
   it "charges minimum fare at touch out" do
     subject.top_up(1)
-    expect { subject.touch_out}.to change {subject.balance}.by -1
+    expect { subject.touch_out("Exit Station")}.to change {subject.balance}.by -1
+  end
+
+  it "journey initializes as an empty array" do
+    expect(subject.journeys).to eql []
   end
 
 end
