@@ -18,14 +18,14 @@ class Oystercard
     @balance -= cost
   end  
 
-  def touch_in(station)
+  def touch_in(station, zone)
     fail "Can't touch in, balance under #{MIN_CHARGE}" if min_balance?
-    @station = station
+    @station = Station.new(station,zone)
   end
 
-  def touch_out(exit_station)
+  def touch_out(exit_station, zone)
     deduct(MIN_CHARGE)
-    @journeys.append({:entry_station => @station, :exit_station => exit_station})
+    @journeys.append({:entry_station => @station, :exit_station => Station.new(exit_station,zone)})
     @station = nil
   end
 
