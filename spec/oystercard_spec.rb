@@ -19,9 +19,6 @@ describe Oystercard do
     end  
   end
 
- 
-
-
   describe "#deduct" do 
     it 'deducts value spent from the balance' do
       expect { subject.deduct 10 }.to change {subject.balance}.by -10
@@ -42,13 +39,13 @@ describe Oystercard do
       expect(@subject.in_journey?).to eql true
     end  
 
-    it 'allows the user to "touch_in" if there is at least minimum balance' do
+    it 'allows the user to "touch_in" if there is at least enough to cover minimum charge' do
       @subject = Oystercard.new(:balance => 0.5)
       expect { @subject.touch_in("Test Station", 1) }.to raise_error("Can't touch in, balance under #{Oystercard::MIN_CHARGE}")
     end
     
 
-    it "it returns a station name, not nill" do
+    it "it returns a station name, not nil" do
       expect(@subject.station).to_not eql nil
     end  
 
@@ -64,7 +61,6 @@ describe Oystercard do
     end
 
     it "charges minimum fare at touch out" do
-      @subject.top_up(5)
       @subject.touch_in("test",5)
       expect { @subject.touch_out("Exit Station", 2)}.to change {@subject.balance}.by -1
     end
@@ -78,7 +74,6 @@ describe Oystercard do
     end
 
     it "returns the correct entry and exit stations" do
-      
       expect([@subject.journeys[0][:entry_station].printer,@subject.journeys[0][:exit_station].printer]).to eql [["Test Station",1], ["Test Exit Station", 2]]  
     end  
 
@@ -92,8 +87,5 @@ describe Oystercard do
       subject = Oystercard.new()
       expect{subject.touch_out("2", 2)}.to raise_error "You did not touch in"
     end
-
   end 
-
-
 end
