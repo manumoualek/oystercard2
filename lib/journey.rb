@@ -26,11 +26,13 @@ class Journey
   def return_log
     return_string = ""
     (0...@log.length).each do |i|
-      return_string += "#{[@log[i][:entry_station].printer,
-        @log[i][:exit_station].printer,
-        @log[i][:charge]]}\n"
+      return_string += "|  #{pprinter(@log[i][:entry_station].printer)}  |  #{pprinter(@log[i][:exit_station].printer)}  |  Charge: #{@log[i][:charge]}  |\n,"
     end
     return_string   
   end
 
+  def pprinter(station)
+    #PRETTTIFY <3
+    "Station: #{station[0]} :: Zone: #{station[1]}"
+  end
 end  
