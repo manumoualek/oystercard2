@@ -1,12 +1,14 @@
+require "station"
+require "journey"
+
 class Oystercard
   attr_reader :balance, :station, :journeys
   MAX_BALANCE = 90
   MIN_CHARGE = 1
 
-  def initialize(balance: 0, station: nil, journeys: Array.new)
+  def initialize(balance: 0, journey: Journey.new)
     @balance = balance
-    @station = station
-    @journeys = journeys
+    @journey = journey
   end
   
   def top_up(amount)
@@ -15,20 +17,29 @@ class Oystercard
   end  
 
   def deduct(cost)
-    @balance -= cost
+    @balance -= cost 
   end  
 
   def touch_in(station, zone)
     fail "You did not touch out last journey" if in_journey?
     fail "Can't touch in, balance under #{MIN_CHARGE}" if min_balance?
-    @station = Station.new(station,zone)
+    if @journey.entry_station != nil
+      @journey.charge
+      @journey.clear_entry
+      touch_in(station, zone)
+    else
+      @journey.entry(station, zone)
+    end
   end
 
-  def touch_out(exit_station, zone)
+  def touch_out(station, zone)
     fail "You did not touch in" unless in_journey?
-    deduct(MIN_CHARGE)
-    @journeys.append({:entry_station => @station, :exit_station => Station.new(exit_station,zone)})
-    @station = nil
+     # NEEDS REINTERGRATING
+    @journey.exit(station, zone)
+    deduct(@journey.charge)
+    @journey.add_journey
+    @journey.clear_entry
+    @journey.clear_exit
   end
 
   def max_balance?(amount)
@@ -40,6 +51,6 @@ class Oystercard
   end
   
   def in_journey?
-    @station != nil
+    @journey.entry_station != nil
   end   
 end  

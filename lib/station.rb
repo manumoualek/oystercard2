@@ -13,7 +13,7 @@ class Station
     @zone
   end  
 
-  def printer
+  def station_array
     [@station,@zone]
   end  
 end  
