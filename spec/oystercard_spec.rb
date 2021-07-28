@@ -61,8 +61,8 @@ describe Oystercard do
     end
 
     it "charges minimum fare at touch out" do
-      @subject.touch_in("test",5)
-      expect { @subject.touch_out("Exit Station", 2)}.to change {@subject.balance}.by -1
+      @subject.touch_in("Test Station",1)
+      expect { @subject.touch_out("Exit Station", 2)}.to change {@subject.balance}.by -Oystercard::MIN_CHARGE
     end
     
     it 'states whether the user has "touched out" or not.' do 
@@ -85,7 +85,7 @@ describe Oystercard do
 
     it "returns an error if no initial touch in " do
       subject = Oystercard.new()
-      expect{subject.touch_out("2", 2)}.to raise_error "You did not touch in"
+      expect{subject.touch_out("New Exit Station", 2)}.to raise_error "You did not touch in"
     end
   end 
 end
