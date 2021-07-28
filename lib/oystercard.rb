@@ -2,7 +2,7 @@ require "station"
 require "journey"
 
 class Oystercard
-  attr_reader :balance, :station, :journeys
+  attr_reader :balance, :journey
   MAX_BALANCE = 90
   MIN_CHARGE = 1
 
@@ -21,9 +21,8 @@ class Oystercard
   end  
 
   def touch_in(station, zone)
-    fail "You did not touch out last journey" if in_journey?
     fail "Can't touch in, balance under #{MIN_CHARGE}" if min_balance?
-    if @journey.entry_station != nil
+    if in_journey?
       @journey.charge
       @journey.clear_entry
       touch_in(station, zone)

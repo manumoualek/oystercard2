@@ -1,12 +1,15 @@
+require "station"
+require "oystercard" 
+
 class Journey
 
   PENALTY = 6
   attr_reader :entry_station, :exit_station, :log
 
-  def initialize(entry_station: nil, exit_station: nil)
+  def initialize(entry_station: nil, exit_station: nil, log: [])
     @entry_station = entry_station
     @exit_station = exit_station
-    @log = []
+    @log = log
   end
   
   def entry(station, zone)

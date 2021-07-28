@@ -1,3 +1,6 @@
+require "journey"
+require "oystercard"
+
 class Station
 
   def initialize(station, zone)

@@ -27,12 +27,9 @@ describe Oystercard do
 
   describe "#touch_in" do
     
-    before(:each) do
-    @subject = Oystercard.new(:balance => 1, :station => Station.new("Test Station",1) )  
-    end
-
-    it "should raise an error if the last journey was not touched_out" do
-      expect {@subject.touch_in("test_station", 15)}.to raise_error "You did not touch out last journey"
+    before(:each) do  
+    @subject = Oystercard.new(:balance => 1 )  
+    @subject.touch_in("Test Station", 1)
     end
 
     it 'states whether the user has "touched in" or not.' do
@@ -46,7 +43,7 @@ describe Oystercard do
     
 
     it "it returns a station name, not nil" do
-      expect(@subject.station).to_not eql nil
+      expect(@subject.journey.entry_station).to_not eql nil
     end  
 
     # station_dbl = double("station", :name => "Oxford Road")
@@ -56,8 +53,9 @@ describe Oystercard do
   describe "#touch_out" do 
     
     before(:each) do
-      @subject = Oystercard.new(:station => Station.new("Test Station", 1), :balance => 10)
-      @subject.touch_out("Test Exit Station", 2)
+      @subject = Oystercard.new(:balance => 10)
+      # @subject.touch_in()
+      # @subject.touch_out("Test Exit Station", 2)
     end
 
     it "charges minimum fare at touch out" do
@@ -69,19 +67,9 @@ describe Oystercard do
       expect(@subject.in_journey?).to eql false
     end
 
-    it "returns the station at touch-out" do 
-      expect(@subject.station).to eql nil
-    end
-
-    it "returns the correct entry and exit stations" do
-      expect([@subject.journeys[0][:entry_station].printer,@subject.journeys[0][:exit_station].printer]).to eql [["Test Station",1], ["Test Exit Station", 2]]  
-    end  
-
-    it "adds all journeys the array" do
-      @subject.touch_in("New Entry Station", 1)
-      @subject.touch_out("New Exit Station", 2)
-      expect(@subject.journeys.length).to eql 2
-    end  
+    # it "returns the correct entry and exit stations" do
+    #   expect([@subject.journeys[0][:entry_station].printer,@subject.journeys[0][:exit_station].printer]).to eql [["Test Station",1], ["Test Exit Station", 2]]  
+    # end  
 
     it "returns an error if no initial touch in " do
       subject = Oystercard.new()

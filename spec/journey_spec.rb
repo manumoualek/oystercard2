@@ -8,7 +8,7 @@ describe Journey do
 
     it "stores the entry station" do
       @subject.entry("Test Station", 1)
-      expect(@subject.entry_station.printer).to eql ["Test Station", 1]
+      expect(@subject.entry_station.station_array).to eql ["Test Station", 1]
     end
   end
   
@@ -21,7 +21,7 @@ describe Journey do
 
     it "stores the exit station" do
       @subject.exit("Test Exit Station", 2)
-      expect(@subject.exit_station.printer).to eql ["Test Exit Station", 2]
+      expect(@subject.exit_station.station_array).to eql ["Test Exit Station", 2]
     end
   end
 
@@ -48,8 +48,8 @@ describe Journey do
     it "logs the completed journey" do
       @subject.add_journey
       expect(
-        [@subject.log[0][:entry_station].printer,
-         @subject.log[0][:exit_station].printer,
+        [@subject.log[0][:entry_station].station_array,
+         @subject.log[0][:exit_station].station_array,
          @subject.log[0][:charge]]).to eql [["Test Station",1], ["Test Exit Station", 2], 1]
     end  
 
@@ -65,8 +65,17 @@ describe Journey do
     end
 
     it "returns a readable log of journeys" do
-      expect(@subject.return_log).to eql '[["Test Station", 1], ["Test Exit Station", 2], 1]' + "\n"  
+      expect(@subject.return_log).to eql "ENTRY: Station: Test Station :: Zone: 1 EXIT: Station: Test Exit Station :: Zone: 2 CHARGE:1\n"  
 
+    end
+    
+    it "returns a log of multiple journeys" do
+      subject = Journey.new(:log =>[
+        {:entry_station => Station.new("Oxford Road", 1), :exit_station => Station.new("Piccadilly Station", 2), :charge => 1},
+        {:entry_station => Station.new("Oxford Road", 1), :exit_station => Station.new("Piccadilly Station", 3), :charge => 2}
+      ])
+
+      expect(subject.return_log).to eq "ENTRY: Station: Oxford Road :: Zone: 1 EXIT: Station: Piccadilly Station :: Zone: 2 CHARGE:1\nENTRY: Station: Oxford Road :: Zone: 1 EXIT: Station: Piccadilly Station :: Zone: 3 CHARGE:2\n"
     end  
   end
 end  
