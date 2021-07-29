@@ -1,5 +1,4 @@
-require "station"
-require "journey"
+require_relative "./journey"
 
 class Oystercard
   attr_reader :balance, :journey
@@ -16,10 +15,6 @@ class Oystercard
       @balance += amount
   end  
 
-  def deduct(cost)
-    @balance -= cost 
-  end  
-
   def touch_in(station, zone)
     fail "Can't touch in, balance under #{MIN_CHARGE}" if min_balance?
     if in_journey?
@@ -33,12 +28,9 @@ class Oystercard
 
   def touch_out(station, zone)
     fail "You did not touch in" unless in_journey?
-     # NEEDS REINTERGRATING
     @journey.exit(station, zone)
     deduct(@journey.charge)
-    @journey.add_journey
-    @journey.clear_entry
-    @journey.clear_exit
+    log_and_clear
   end
 
   def max_balance?(amount)
@@ -52,4 +44,18 @@ class Oystercard
   def in_journey?
     @journey.entry_station != nil
   end   
-end  
+
+  def log_and_clear
+    @journey.add_journey
+    @journey.clear_exit
+    @journey.clear_entry
+  end
+
+  def journey_printer
+    print(@journey.return_log)
+  end
+  private
+  def deduct(cost)
+    @balance -= cost 
+  end  
+end

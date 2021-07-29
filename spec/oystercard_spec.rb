@@ -45,9 +45,6 @@ describe Oystercard do
     it "it returns a station name, not nil" do
       expect(@subject.journey.entry_station).to_not eql nil
     end  
-
-    # station_dbl = double("station", :name => "Oxford Road")
-    # subject = Oystercard.new(:station => station_dbl)
   end
   
   describe "#touch_out" do 
@@ -58,9 +55,14 @@ describe Oystercard do
       # @subject.touch_out("Test Exit Station", 2)
     end
 
-    it "charges minimum fare at touch out" do
+    it "charges corrct fare at touch out" do
       @subject.touch_in("Test Station",1)
-      expect { @subject.touch_out("Exit Station", 2)}.to change {@subject.balance}.by -Oystercard::MIN_CHARGE
+      expect { @subject.touch_out("Exit Station", 2)}.to change {@subject.balance}.by -2
+    end
+
+    it "charges correct fare at touch out" do
+      @subject.touch_in("Test Station", 1)
+      expect {@subject.touch_out("Exit Station", 3)}.to change {@subject.balance}.by -3
     end
     
     it 'states whether the user has "touched out" or not.' do 

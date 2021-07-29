@@ -1,5 +1,5 @@
-require "station"
-require "oystercard" 
+require_relative "./station"
+
 
 class Journey
 
@@ -22,9 +22,10 @@ class Journey
 
   def charge
     if @entry_station == nil || @exit_station == nil
+      add_journey
       return PENALTY
     else
-      return (@entry_station.zone - @exit_station.zone).abs
+      return (@entry_station.zone - @exit_station.zone).abs + 1
     end
     
   end  
@@ -36,8 +37,13 @@ class Journey
   def return_log
     return_string = ""
     (0...@log.length).each do |i|
-      return_string += "ENTRY: #{pprinter(@log[i][:entry_station].station_array)} EXIT: #{pprinter(@log[i][:exit_station].station_array)} CHARGE:#{@log[i][:charge]}\n"
-      #return_string += "|  #{pprinter(@log[i][:entry_station].station_array)}  |  #{pprinter(@log[i][:exit_station].station_array)}  |  Charge: #{@log[i][:charge]}  |\n,"
+      if @log[i][:entry_station] == nil
+        return_string += "ENTRY: #{@log[i][:entry_station]}\nEXIT: #{pprinter(@log[i][:exit_station].station_array)}\nCHARGE:#{@log[i][:charge]}\n\n"
+      elsif @log[i][:exit_station] == nil
+        return_string += "ENTRY: #{pprinter(@log[i][:entry_station].station_array)}\nEXIT: #{@log[i][:exit_station]}\nCHARGE:#{@log[i][:charge]}\n\n"
+      else
+        return_string += "ENTRY: #{pprinter(@log[i][:entry_station].station_array)}\nEXIT: #{pprinter(@log[i][:exit_station].station_array)}\nCHARGE:#{@log[i][:charge]}\n\n"
+      end
     end
     return_string   
   end

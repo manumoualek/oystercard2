@@ -1,5 +1,3 @@
-require "journey"
-require "oystercard"
 
 class Station
 

@@ -33,7 +33,7 @@ describe Journey do
     end
     
     it "returns the value of the charge" do
-      expect(@subject.charge).to eql 1
+      expect(@subject.charge).to eql 2
     end  
   end
 
@@ -50,7 +50,7 @@ describe Journey do
       expect(
         [@subject.log[0][:entry_station].station_array,
          @subject.log[0][:exit_station].station_array,
-         @subject.log[0][:charge]]).to eql [["Test Station",1], ["Test Exit Station", 2], 1]
+         @subject.log[0][:charge]]).to eql [["Test Station",1], ["Test Exit Station", 2], 2]
     end  
 
   end
@@ -65,17 +65,17 @@ describe Journey do
     end
 
     it "returns a readable log of journeys" do
-      expect(@subject.return_log).to eql "ENTRY: Station: Test Station :: Zone: 1 EXIT: Station: Test Exit Station :: Zone: 2 CHARGE:1\n"  
+      expect(@subject.return_log).to eql "ENTRY: Station: Test Station :: Zone: 1\nEXIT: Station: Test Exit Station :: Zone: 2\nCHARGE:2\n\n"  
 
     end
     
     it "returns a log of multiple journeys" do
       subject = Journey.new(:log =>[
-        {:entry_station => Station.new("Oxford Road", 1), :exit_station => Station.new("Piccadilly Station", 2), :charge => 1},
-        {:entry_station => Station.new("Oxford Road", 1), :exit_station => Station.new("Piccadilly Station", 3), :charge => 2}
+        {:entry_station => Station.new("Oxford Road", 1), :exit_station => Station.new("Piccadilly Station", 2), :charge => 2},
+        {:entry_station => Station.new("Oxford Road", 1), :exit_station => Station.new("Piccadilly Station", 3), :charge => 3}
       ])
 
-      expect(subject.return_log).to eq "ENTRY: Station: Oxford Road :: Zone: 1 EXIT: Station: Piccadilly Station :: Zone: 2 CHARGE:1\nENTRY: Station: Oxford Road :: Zone: 1 EXIT: Station: Piccadilly Station :: Zone: 3 CHARGE:2\n"
+      expect(subject.return_log).to eq "ENTRY: Station: Oxford Road :: Zone: 1\nEXIT: Station: Piccadilly Station :: Zone: 2\nCHARGE:2\n\nENTRY: Station: Oxford Road :: Zone: 1\nEXIT: Station: Piccadilly Station :: Zone: 3\nCHARGE:3\n\n"
     end  
   end
 end  
