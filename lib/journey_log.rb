@@ -1,39 +1,13 @@
-require_relative "./station"
-
-
-class Journey
-
-  PENALTY = 6
-  attr_reader :entry_station, :exit_station, :log
-
-  def initialize(entry_station: nil, exit_station: nil, log: JourneyLog.new)
-    @entry_station = entry_station
-    @exit_station = exit_station
+class JourneyLog
+  attr_reader :log
+  def initialize(log: [])
     @log = log
-  end
-  
-  def entry(station, zone)
-    @entry_station = Station.new(station, zone)
   end  
 
-  def exit(station, zone)
-    @exit_station = Station.new(station, zone)
+  def add_journey(entry_station,exit_station,charge)
+    @log.append({:entry_station => entry_station, :exit_station => exit_station, :charge => charge})  
   end  
 
-  def charge
-    if @entry_station == nil || @exit_station == nil
-      add_journey
-      return PENALTY
-    else
-      return (@entry_station.zone - @exit_station.zone).abs + 1
-    end
-    
-  end  
-
-  def add_journey
-    @log.add_journey(@entry_station,@exit_station,charge)
-  end
-  
   def return_log
     return_string = ""
     (0...@log.length).each do |i|
@@ -47,17 +21,9 @@ class Journey
     end
     return_string   
   end
-
+  
   def pprinter(station)
     #PRETTTIFY <3
     "Station: #{station[0]} :: Zone: #{station[1]}"
-  end
-
-  def clear_entry
-    @entry_station = nil
-  end
-
-  def clear_exit
-    @exit_station = nil
   end
 end  

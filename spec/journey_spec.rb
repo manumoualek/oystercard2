@@ -45,13 +45,13 @@ describe Journey do
       )
     end
     
-    it "logs the completed journey" do
-      @subject.add_journey
-      expect(
-        [@subject.log[0][:entry_station].station_array,
-         @subject.log[0][:exit_station].station_array,
-         @subject.log[0][:charge]]).to eql [["Test Station",1], ["Test Exit Station", 2], 2]
-    end  
+    # it "logs the completed journey" do
+    #   @subject.add_journey
+    #   expect(
+    #     [@subject.log[0][:entry_station].station_array,
+    #      @subject.log[0][:exit_station].station_array,
+    #      @subject.log[0][:charge]]).to eql [["Test Station",1], ["Test Exit Station", 2], 2]
+    # end  
 
   end
 
@@ -64,10 +64,10 @@ describe Journey do
       @subject.add_journey
     end
 
-    it "returns a readable log of journeys" do
-      expect(@subject.return_log).to eql "ENTRY: Station: Test Station :: Zone: 1\nEXIT: Station: Test Exit Station :: Zone: 2\nCHARGE:2\n\n"  
+    # it "returns a readable log of journeys" do
+    #   expect(@subject.return_log).to eql "ENTRY: Station: Test Station :: Zone: 1\nEXIT: Station: Test Exit Station :: Zone: 2\nCHARGE:2\n\n"  
 
-    end
+    # end
     
     it "returns a log of multiple journeys" do
       subject = Journey.new(:log =>[
