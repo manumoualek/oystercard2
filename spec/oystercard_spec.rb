@@ -19,12 +19,6 @@ describe Oystercard do
     end  
   end
 
-  describe "#deduct" do 
-    it 'deducts value spent from the balance' do
-      expect { subject.deduct 10 }.to change {subject.balance}.by -10
-    end
-  end
-
   describe "#touch_in" do
     
     before(:each) do  
